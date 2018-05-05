@@ -3,6 +3,11 @@ kind: Cluster
 metadata:
   name: ${cluster-name}
 spec:
+  egressProxy:
+    httpProxy:
+      host: proxy.service.consul
+      port: 3128
+    excludes: .consul,127.0.0.1,localhost,api.nubis-jd.k8s.local,nubis-jd.k8s.local,100.64.0.1,100.64.0.0/10,169.254.169.254,172.16.0.0/16
   api:
     loadBalancer:
       type: ${master-lb-visibility}

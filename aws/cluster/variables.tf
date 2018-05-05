@@ -280,6 +280,25 @@ variable "master-image" {
   description = "AMI id to use for the master nodes"
 }
 
+variable "master-additional-sgs" {
+  type        = "list"
+  description = "Additional security groups to add to our master nodes"
+
+  default = []
+}
+
+variable "master-additional-sgs-count" {
+  type        = "string"
+  description = "Number of security groups to add to our master nodes"
+
+  default = 0
+}
+
+variable "master-addidtional-user-data" {
+    type = "string"
+    default = ""
+}
+
 variable "master-machine-type" {
   type        = "string"
   description = "EC2 instance type to run our masters onto (default: m3.medium)"
@@ -350,7 +369,7 @@ variable "bastion-image" {
 
 variable "bastion-additional-sgs" {
   type        = "list"
-  description = "Number of security groups to add to our bastion nodes"
+  description = "Additional security groups to add to our bastion nodes"
 
   default = []
 }
@@ -360,6 +379,11 @@ variable "bastion-additional-sgs-count" {
   description = "Number of security groups to add to our bastion nodes"
 
   default = 0
+}
+
+variable "bastion-addidtional-user-data" {
+    type = "string"
+    default = ""
 }
 
 variable "bastion-machine-type" {
@@ -465,6 +489,11 @@ variable "minion-additional-sgs-count" {
   description = "Number of security groups to add to our minion nodes"
 
   default = 0
+}
+
+variable "minion-addidtional-user-data" {
+    type = "string"
+    default = ""
 }
 
 variable "minion-image" {

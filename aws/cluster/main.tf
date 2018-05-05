@@ -29,7 +29,7 @@ resource "null_resource" "kops-cluster" {
   // Let's wait for our newly created DNS zone to propagate
   provisioner "local-exec" {
     command = <<EOF
-      until test ! -z "$(dig NS ${var.cluster-name} | grep "ANSWER SECTION")"
+      until test ! -z "$(dig NS @${aws_route53_zone.cluster.name_servers[0]} ${var.cluster-name} | grep "ANSWER SECTION")"
       do
         echo "DNS zone ${var.cluster-name} isn't available yet, retrying in 5s"
         sleep 5s

@@ -8,7 +8,16 @@ data "template_file" "master-spec" {
     node-labels             = "${join("\n", data.template_file.master-node-labels.*.rendered)}"
     name                    = "master-${element(var.master-availability-zones, count.index)}"
     public                  = "false"
-    additional-sgs          = ""
+    additional-sgs = <<EOF
+  ${length(var.master-additional-sgs) > 0 ? "additionalSecurityGroups:" : ""}
+${join("\n", data.template_file.master-additional-sgs.*.rendered)}
+EOF
+
+additional-user-data = <<EOF
+  ${length(var.master-addidtional-user-data) > 0 ? "additionalUserData:" : ""}
+${var.master-addidtional-user-data}
+EOF
+
     image                   = "${var.master-image}"
     type                    = "${var.master-machine-type}"
     max-size                = 1
@@ -22,6 +31,16 @@ data "template_file" "master-spec" {
     taints                  = ""
     subnets                 = "  - ${element(var.master-availability-zones, count.index)}"
     hooks                   = "${join("\n", data.template_file.master-hooks.*.rendered)}"
+  }
+}
+
+data "template_file" "master-additional-sgs" {
+  count = "${var.master-additional-sgs-count}"
+
+  template = "  - $${sg-id}"
+
+  vars {
+    sg-id = "${element(var.master-additional-sgs, count.index)}"
   }
 }
 
@@ -72,7 +91,12 @@ data "template_file" "bastion-spec" {
 
     additional-sgs = <<EOF
   ${length(var.bastion-additional-sgs) > 0 ? "additionalSecurityGroups:" : ""}
-  ${join("\n", data.template_file.bastion-additional-sgs.*.rendered)}
+${join("\n", data.template_file.bastion-additional-sgs.*.rendered)}
+EOF
+
+additional-user-data = <<EOF
+  ${length(var.bastion-addidtional-user-data) > 0 ? "additionalUserData:" : ""}
+${var.bastion-addidtional-user-data}
 EOF
 
     image                   = "${var.bastion-image}"
@@ -147,7 +171,12 @@ data "template_file" "minion-spec" {
 
     additional-sgs = <<EOF
   ${length(var.minion-additional-sgs) > 0 ? "additionalSecurityGroups:" : ""}
-  ${join("\n", data.template_file.minion-additional-sgs.*.rendered)}
+${join("\n", data.template_file.minion-additional-sgs.*.rendered)}
+EOF
+
+additional-user-data = <<EOF
+  ${length(var.minion-addidtional-user-data) > 0 ? "additionalUserData:" : ""}
+${var.minion-addidtional-user-data}
 EOF
 
     image                   = "${var.minion-image}"
