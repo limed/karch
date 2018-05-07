@@ -7,7 +7,7 @@ spec:
     httpProxy:
       host: proxy.service.consul
       port: 3128
-    excludes: .consul,127.0.0.1,localhost,api.nubis-jd.k8s.local,nubis-jd.k8s.local,100.64.0.1,100.64.0.0/10,169.254.169.254,172.16.0.0/16
+    excludes: .consul,127.0.0.1,localhost,100.64.0.1,100.64.0.0/10,169.254.169.254,${vpc-cidr}
   api:
     loadBalancer:
       type: ${master-lb-visibility}
