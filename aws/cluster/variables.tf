@@ -294,7 +294,7 @@ variable "master-additional-sgs-count" {
   default = 0
 }
 
-variable "master-addidtional-user-data" {
+variable "master-additional-user-data" {
     type = "string"
     default = ""
 }
@@ -381,7 +381,7 @@ variable "bastion-additional-sgs-count" {
   default = 0
 }
 
-variable "bastion-addidtional-user-data" {
+variable "bastion-additional-user-data" {
     type = "string"
     default = ""
 }
@@ -491,7 +491,7 @@ variable "minion-additional-sgs-count" {
   default = 0
 }
 
-variable "minion-addidtional-user-data" {
+variable "minion-additional-user-data" {
     type = "string"
     default = ""
 }
