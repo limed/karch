@@ -88,6 +88,10 @@ resource "null_resource" "kops-update" {
 
       kops --state=s3://${var.kops-state-bucket} \
         update cluster ${var.cluster-name} --yes
+
+      kops --state s3://${var.kops-state-bucket} \
+        rolling-update cluster ${var.cluster-name} --yes \
+        --master-interval=${var.master-update-interval}m --node-interval=${var.minion-update-interval}m
 EOF
   }
 
