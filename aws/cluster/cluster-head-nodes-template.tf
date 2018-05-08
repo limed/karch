@@ -13,9 +13,9 @@ data "template_file" "master-spec" {
 ${join("\n", data.template_file.master-additional-sgs.*.rendered)}
 EOF
 
-additional-user-data = <<EOF
-  ${length(var.master-addidtional-user-data) > 0 ? "additionalUserData:" : ""}
-${var.master-addidtional-user-data}
+    additional-user-data = <<EOF
+  ${length(var.master-additional-user-data) > 0 ? "additionalUserData:" : ""}
+${var.master-additional-user-data}
 EOF
 
     image                   = "${var.master-image}"
@@ -88,15 +88,14 @@ data "template_file" "bastion-spec" {
     node-labels  = "${join("\n", data.template_file.bastion-node-labels.*.rendered)}"
     name         = "bastions"
     public       = "false"
-
     additional-sgs = <<EOF
   ${length(var.bastion-additional-sgs) > 0 ? "additionalSecurityGroups:" : ""}
 ${join("\n", data.template_file.bastion-additional-sgs.*.rendered)}
 EOF
 
-additional-user-data = <<EOF
-  ${length(var.bastion-addidtional-user-data) > 0 ? "additionalUserData:" : ""}
-${var.bastion-addidtional-user-data}
+    additional-user-data = <<EOF
+  ${length(var.bastion-additional-user-data) > 0 ? "additionalUserData:" : ""}
+${var.bastion-additional-user-data}
 EOF
 
     image                   = "${var.bastion-image}"
@@ -174,9 +173,9 @@ data "template_file" "minion-spec" {
 ${join("\n", data.template_file.minion-additional-sgs.*.rendered)}
 EOF
 
-additional-user-data = <<EOF
-  ${length(var.minion-addidtional-user-data) > 0 ? "additionalUserData:" : ""}
-${var.minion-addidtional-user-data}
+    additional-user-data = <<EOF
+  ${length(var.minion-additional-user-data) > 0 ? "additionalUserData:" : ""}
+${var.minion-additional-user-data}
 EOF
 
     image                   = "${var.minion-image}"
