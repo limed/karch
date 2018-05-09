@@ -602,3 +602,8 @@ variable "log-level" {
 
   default = 0
 }
+
+variable "max-price" {
+  description = "Spot instance max price"
+  default     = ""
+}
