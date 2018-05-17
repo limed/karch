@@ -607,3 +607,10 @@ variable "max-price" {
   description = "Spot instance max price"
   default     = ""
 }
+
+variable "addons" {
+  type        = "list"
+  description = "List of cluster addons"
+
+  default = []
+}

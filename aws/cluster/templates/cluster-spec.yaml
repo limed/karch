@@ -15,6 +15,7 @@ spec:
   authorization:
     ${kops-authorization-mode}: {}
   channel: ${channel}
+${addons}
   cloudConfig:
     disableSecurityGroupIngress: ${disable-sg-ingress}
   cloudLabels:

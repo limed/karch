@@ -7,6 +7,7 @@ data "template_file" "cluster-spec" {
     channel            = "${var.channel}"
     disable-sg-ingress = "${var.disable-sg-ingress}"
     cloud-labels       = "${join("\n", data.template_file.cloud-labels.*.rendered)}"
+    addons             = "${join("", data.template_file.addons.*.rendered)}"
     kube-dns-domain    = "${var.kube-dns-domain}"
     kops-state-bucket  = "${var.kops-state-bucket}"
 
@@ -106,6 +107,29 @@ EOF
   vars {
     tag   = "${element(keys(var.cloud-labels), count.index)}"
     value = "${element(values(var.cloud-labels), count.index)}"
+  }
+}
+
+data "template_file" "addons" {
+  count = "${signum(length(var.addons))}"
+
+  template = <<EOF
+  addons:
+$${addons}
+EOF
+
+  vars {
+    addons = "${join("\n", data.template_file.addons_parts.*.rendered)}"
+  }
+}
+
+data "template_file" "addons_parts" {
+  count = "${length(var.addons)}"
+
+  template = "    - $${addon}"
+
+  vars {
+    addon = "${var.addons[count.index]}"
   }
 }
 
