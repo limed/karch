@@ -81,10 +81,15 @@ resource "null_resource" "kops-update" {
 
   provisioner "local-exec" {
     command = <<EOF
+      set -e
+
+      cleanup() {
+        rm -f ${path.module}/${var.cluster-name}-cluster-spec.yml
+      }
+      trap cleanup EXIT
+
       kops --state=s3://${var.kops-state-bucket} \
         replace -f ${path.module}/${var.cluster-name}-cluster-spec.yml
-
-      rm -f ${path.module}/${var.cluster-name}-cluster-spec.yml
 
       kops --state=s3://${var.kops-state-bucket} \
         update cluster ${var.cluster-name} --yes
