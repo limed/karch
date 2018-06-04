@@ -1,4 +1,6 @@
 data "template_file" "cluster-spec" {
+  count = "${var.enabled}"
+
   template = "${file("${path.module}/templates/cluster-spec.yaml")}"
 
   vars {
@@ -72,7 +74,7 @@ EOF
 }
 
 data "template_file" "etcd-member" {
-  count = "${length(var.master-availability-zones)}"
+  count = "${var.enabled * length(var.master-availability-zones)}"
 
   template = <<EOF
     - encryptedVolume: true
@@ -86,7 +88,7 @@ EOF
 }
 
 data "template_file" "trusted-cidrs" {
-  count = "${length(var.trusted-cidrs)}"
+  count = "${var.enabled * length(var.trusted-cidrs)}"
 
   template = <<EOF
   - $${cidr}
@@ -98,7 +100,7 @@ EOF
 }
 
 data "template_file" "cloud-labels" {
-  count = "${length(keys(var.cloud-labels))}"
+  count = "${var.enabled * length(keys(var.cloud-labels))}"
 
   template = <<EOF
     $${tag}: '$${value}'
@@ -134,7 +136,7 @@ data "template_file" "addons_parts" {
 }
 
 data "template_file" "subnets" {
-  count = "${length(var.availability-zones)}"
+  count = "${var.enabled * length(var.availability-zones)}"
 
   template = <<EOF
   - cidr: $${private-cidr}
@@ -161,7 +163,7 @@ EOF
 }
 
 data "template_file" "oidc-apiserver-conf" {
-  count = "${var.oidc-issuer-url == "" ? 0 : 1}"
+  count = "${var.enabled * (var.oidc-issuer-url == "" ? 0 : 1)}"
 
   template = <<EOF
     oidcCAFile: ${var.oidc-ca-file}
@@ -173,13 +175,13 @@ EOF
 }
 
 data "template_file" "apiserver-runtime-configs" {
-  count = "${length(var.apiserver-runtime-flags)}"
+  count = "${var.enabled * length(var.apiserver-runtime-flags)}"
 
   template = "      ${element(keys(var.apiserver-runtime-flags), count.index)}: '${element(values(var.apiserver-runtime-flags), count.index)}'"
 }
 
 data "template_file" "hooks" {
-  count = "${length(var.hooks)}"
+  count = "${var.enabled * length(var.hooks)}"
 
   template = <<EOF
 ${element(var.hooks, count.index)}

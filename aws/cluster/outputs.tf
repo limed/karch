@@ -1,10 +1,10 @@
 # Lifecycle hooks
 output "master-up" {
-  value = "${null_resource.master-up.id}"
+  value = "${element(concat(null_resource.master-up.*.id, list("")), 0)}"
 }
 
 output "cluster-created" {
-  value = "${null_resource.kops-cluster.id}"
+  value = "${element(concat(null_resource.kops-cluster.*.id, list("")), 0)}"
 }
 
 # DNS zone for the cluster subdomain
