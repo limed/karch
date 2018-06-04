@@ -1,5 +1,5 @@
 data "template_file" "master-spec" {
-  count    = "${length(var.master-availability-zones)}"
+  count    = "${var.enabled * length(var.master-availability-zones)}"
   template = "${file("${path.module}/templates/ig-spec.yaml")}"
 
   vars {
@@ -35,7 +35,7 @@ EOF
 }
 
 data "template_file" "master-additional-sgs" {
-  count = "${var.master-additional-sgs-count}"
+  count = "${var.enabled * var.master-additional-sgs-count}"
 
   template = "  - $${sg-id}"
 
@@ -45,7 +45,7 @@ data "template_file" "master-additional-sgs" {
 }
 
 data "template_file" "master-cloud-labels" {
-  count = "${length(keys(var.master-cloud-labels))}"
+  count = "${var.enabled * length(keys(var.master-cloud-labels))}"
 
   template = <<EOF
     $${tag}: '$${value}'
@@ -58,7 +58,7 @@ EOF
 }
 
 data "template_file" "master-node-labels" {
-  count = "${length(keys(var.master-node-labels))}"
+  count = "${var.enabled * length(keys(var.master-node-labels))}"
 
   template = <<EOF
     $${tag}: '$${value}'
@@ -71,7 +71,7 @@ EOF
 }
 
 data "template_file" "master-hooks" {
-  count = "${length(var.master-hooks)}"
+  count = "${var.enabled * length(var.master-hooks)}"
 
   template = <<EOF
 ${element(var.master-hooks, count.index)}
@@ -79,7 +79,7 @@ EOF
 }
 
 data "template_file" "bastion-spec" {
-  count    = "${var.kops-topology == "private" ? 1 : 0}"
+  count    = "${var.enabled * (var.kops-topology == "private" ? 1 : 0)}"
   template = "${file("${path.module}/templates/ig-spec.yaml")}"
 
   vars {
@@ -115,7 +115,7 @@ EOF
 }
 
 data "template_file" "bastion-additional-sgs" {
-  count = "${var.bastion-additional-sgs-count}"
+  count = "${var.enabled * var.bastion-additional-sgs-count}"
 
   template = "  - $${sg-id}"
 
@@ -125,7 +125,7 @@ data "template_file" "bastion-additional-sgs" {
 }
 
 data "template_file" "bastion-cloud-labels" {
-  count = "${length(keys(var.bastion-cloud-labels))}"
+  count = "${var.enabled * length(keys(var.bastion-cloud-labels))}"
 
   template = <<EOF
     $${tag}: '$${value}'
@@ -138,7 +138,7 @@ EOF
 }
 
 data "template_file" "bastion-node-labels" {
-  count = "${length(keys(var.bastion-node-labels))}"
+  count = "${var.enabled * length(keys(var.bastion-node-labels))}"
 
   template = <<EOF
     $${tag}: '$${value}'
@@ -151,7 +151,7 @@ EOF
 }
 
 data "template_file" "bastion-hooks" {
-  count = "${length(var.bastion-hooks)}"
+  count = "${var.enabled * length(var.bastion-hooks)}"
 
   template = <<EOF
 ${element(var.bastion-hooks, count.index)}
@@ -159,6 +159,8 @@ EOF
 }
 
 data "template_file" "minion-spec" {
+  count = "${var.enabled}"
+
   template = "${file("${path.module}/templates/ig-spec.yaml")}"
 
   vars {
@@ -195,13 +197,13 @@ EOF
 }
 
 data "template_file" "minion-taints" {
-  count = "${length(var.minion-taints)}"
+  count = "${var.enabled * length(var.minion-taints)}"
 
   template = "  - ${element(var.minion-taints, count.index)}"
 }
 
 data "template_file" "minion-subnets" {
-  count    = "${length(var.availability-zones)}"
+  count    = "${var.enabled * length(var.availability-zones)}"
   template = "  - $${az}"
 
   vars {
@@ -210,7 +212,7 @@ data "template_file" "minion-subnets" {
 }
 
 data "template_file" "minion-additional-sgs" {
-  count = "${var.minion-additional-sgs-count}"
+  count = "${var.enabled * var.minion-additional-sgs-count}"
 
   template = "  - $${sg-id}"
 
@@ -220,7 +222,7 @@ data "template_file" "minion-additional-sgs" {
 }
 
 data "template_file" "minion-cloud-labels" {
-  count = "${length(keys(var.minion-cloud-labels))}"
+  count = "${var.enabled * length(keys(var.minion-cloud-labels))}"
 
   template = <<EOF
     $${tag}: '$${value}'
@@ -233,7 +235,7 @@ EOF
 }
 
 data "template_file" "minion-node-labels" {
-  count = "${length(keys(var.minion-node-labels))}"
+  count = "${var.enabled * length(keys(var.minion-node-labels))}"
 
   template = <<EOF
     $${tag}: '$${value}'
@@ -246,7 +248,7 @@ EOF
 }
 
 data "template_file" "minion-hooks" {
-  count = "${length(var.minion-hooks)}"
+  count = "${var.enabled * length(var.minion-hooks)}"
 
   template = <<EOF
 ${element(var.minion-hooks, count.index)}

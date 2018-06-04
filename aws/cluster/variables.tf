@@ -1,3 +1,8 @@
+variable "enabled" {
+  description = "Enable flag to create or disable resource creation"
+  default     = "1"
+}
+
 variable "aws-region" {
   description = "The AWS region in which to deploy your cluster & VPC."
   type        = "string"

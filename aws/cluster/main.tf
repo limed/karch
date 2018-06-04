@@ -1,4 +1,5 @@
 resource "aws_s3_bucket_object" "cluster-spec" {
+  count  = "${var.enabled}"
   bucket = "${var.kops-state-bucket}"
   key    = "/karch-specs/${var.cluster-name}/master-cluster-spec.yml"
 
@@ -21,6 +22,8 @@ EOF
 }
 
 resource "null_resource" "kops-cluster" {
+  count = "${var.enabled}"
+
   // Let's dump the cluster spec in a conf file
   provisioner "local-exec" {
     command = "echo \"${aws_s3_bucket_object.cluster-spec.content}\" > ${path.module}/${var.cluster-name}-cluster-spec.yml"
@@ -71,6 +74,8 @@ EOF
 }
 
 resource "null_resource" "kops-update" {
+  count = "${var.enabled}"
+
   triggers {
     cluster_spec = "${aws_s3_bucket_object.cluster-spec.content}"
   }
