@@ -113,7 +113,7 @@ EOF
 }
 
 data "template_file" "addons" {
-  count = "${signum(length(var.addons))}"
+  count = "${var.addons_count}"
 
   template = <<EOF
   addons:
@@ -126,7 +126,7 @@ EOF
 }
 
 data "template_file" "addons_parts" {
-  count = "${length(var.addons)}"
+  count = "${var.addons_count}"
 
   template = "    - $${addon}"
 
