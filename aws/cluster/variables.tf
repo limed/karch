@@ -619,3 +619,7 @@ variable "addons" {
 
   default = []
 }
+
+variable "addons_count" {
+  default = ""
+}
