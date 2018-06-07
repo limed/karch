@@ -9,7 +9,7 @@ output "cluster-created" {
 
 # DNS zone for the cluster subdomain
 output "route53-cluster-zone-id" {
-  value = "${aws_route53_zone.cluster.id}"
+  value = "${element(concat(aws_route53_zone.cluster.*.id, list("")), 0)}"
 }
 
 output "vpc-id" {
@@ -18,5 +18,5 @@ output "vpc-id" {
 
 // Nodes security groups (to direct ELB traffic to hostPort pods)
 output "nodes-sg" {
-  value = "${element(split("/", data.aws_security_group.nodes.arn), 1)}"
+  value = "${element(split("/", element(concat(data.aws_security_group.nodes.*.arn, list("")), 0)), 1)}"
 }
