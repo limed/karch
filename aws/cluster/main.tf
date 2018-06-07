@@ -60,6 +60,7 @@ EOF
 
 // Hook for other modules (like instance groups) to wait for the master to be available
 resource "null_resource" "master-up" {
+  count = "${var.enabled}"
   provisioner "local-exec" {
     command = <<EOF
       until kops --state=s3://${var.kops-state-bucket} validate cluster --name ${var.cluster-name}

@@ -3,11 +3,13 @@
  */
 
 resource "aws_route53_zone" "cluster" {
+  count         = "${var.enabled}"
   name          = "${var.cluster-name}"
   force_destroy = true
 }
 
 resource "aws_route53_record" "cluster-root" {
+  count         = "${var.enabled}"
   zone_id = "${var.main-zone-id}"
   name    = "${var.cluster-name}"
   type    = "NS"

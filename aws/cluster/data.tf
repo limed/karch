@@ -1,4 +1,5 @@
 data "aws_security_group" "nodes" {
+  count = "${var.enabled}"
   vpc_id = "${var.vpc-id}"
 
   filter {
